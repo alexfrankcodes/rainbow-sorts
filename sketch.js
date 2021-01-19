@@ -1,56 +1,78 @@
-let hues = [];
-
-let d = 3;
-
-let i = 0;
-let j = 0;
-
 let canvasWidth = 800;
 let canvasHeight = 300;
 let numOfColors = 200;
-00;
 
 let roundness = canvasWidth / 1.5;
 
-function setup() {
-  createCanvas(canvasWidth, canvasHeight);
-  frameRate(30);
-  hues = new Array(numOfColors);
+let bubbleSketch = (p) => {
+  let hues = new Array(numOfColors);
+  p.setup = () => {
+    p.createCanvas(canvasWidth, canvasHeight);
+    p.frameRate(30);
 
-  /* TODO: Refactor how colors are generated
-   *   Rainbow colors should be generated and put into an
-   *   array, then shuffled. This will ensure the end result
-   *   of each rainbow is exactly the same.
-   */
-  for (let i = 0; i < hues.length; i++) {
-    hues[i] = Math.ceil(Math.random() * 310);
-    // Skip over some green hues since there is a lot
-    if (hues[i] > 90 && hues[i] < 150) {
-      hues[i] += 20;
+    /* TODO: Refactor how colors are generated
+     *   Rainbow colors should be generated and put into an
+     *   array, then shuffled. This will ensure the end result
+     *   of each rainbow is exactly the same.
+     */
+    for (let i = 0; i < hues.length; i++) {
+      hues[i] = Math.ceil(Math.random() * 310);
+      // Skip over some green hues since there is a lot
+      if (hues[i] > 90 && hues[i] < 150) {
+        hues[i] += 20;
+      }
     }
-  }
-}
+  };
 
-function draw() {
-  background(0);
+  p.draw = () => {
+    p.background(0);
+    bubbleSort(hues);
+    drawRainbow(p, hues);
+  };
+};
 
-  bubbleSort(hues);
-  // quickSort(hues, 0, hues.length - 1);
+let quickSketch = (p) => {
+  let hues = new Array(numOfColors);
+  p.setup = () => {
+    p.createCanvas(canvasWidth, canvasHeight);
+    p.frameRate(30);
 
-  // Draw rainbow
+    /* TODO: Refactor how colors are generated
+     *   Rainbow colors should be generated and put into an
+     *   array, then shuffled. This will ensure the end result
+     *   of each rainbow is exactly the same.
+     */
+    for (let i = 0; i < hues.length; i++) {
+      hues[i] = Math.ceil(Math.random() * 310);
+      // Skip over some green hues since there is a lot
+      if (hues[i] > 90 && hues[i] < 150) {
+        hues[i] += 20;
+      }
+    }
+  };
+
+  p.draw = () => {
+    p.background(0);
+    // Put appropriate sorting function here
+    quickSort(hues, 0, hues.length - 1);
+    drawRainbow(p, hues);
+  };
+};
+
+function drawRainbow(p, hues) {
   for (let i = 0; i < hues.length; i++) {
-    strokeWeight(1);
-    stroke(color(`hsl(${hues[i]}, 90%, 60%)`));
-    translate(0, -0.09);
-    noFill();
-    arc(
+    p.strokeWeight(1);
+    p.stroke(p.color(`hsl(${hues[i]}, 90%, 60%)`));
+    p.translate(0, -0.09);
+    p.noFill();
+    p.arc(
       canvasWidth / 2,
       canvasHeight + 100,
       roundness + i,
       roundness + i,
-      PI,
+      p.PI,
       0,
-      OPEN
+      p.OPEN
     );
   }
 }
@@ -62,16 +84,18 @@ async function swap(items, leftIndex, rightIndex) {
 }
 
 async function bubbleSort(arr) {
+  let i = 0;
   if (i < arr.length) {
     for (let j = 0; j < arr.length - i - 1; j++) {
       let currentItem = arr[j];
       let nextItem = arr[j + 1];
       if (currentItem < nextItem) {
+        await sleep(10);
         await swap(arr, j, j + 1);
       }
     }
   } else {
-    noLoop();
+    p.noLoop();
   }
   i++;
 }
@@ -119,3 +143,6 @@ async function quickSort(items, left, right) {
 
 // TODO: Finish implementation
 // function selectionSort(arr){}
+
+let bubblesortSketch = new p5(bubbleSketch, "bubblesort-container");
+let quickSortSketch = new p5(quickSketch, "quicksort-container");
