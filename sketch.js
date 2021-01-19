@@ -59,6 +59,33 @@ let quickSketch = (p) => {
   };
 };
 
+let insertionSketch = (p) => {
+  let hues = new Array(numOfColors);
+  p.setup = () => {
+    p.createCanvas(canvasWidth, canvasHeight);
+    p.frameRate(30);
+
+    /* TODO: Refactor how colors are generated
+     *   Rainbow colors should be generated and put into an
+     *   array, then shuffled. This will ensure the end result
+     *   of each rainbow is exactly the same.
+     */
+    for (let i = 0; i < hues.length; i++) {
+      hues[i] = Math.ceil(Math.random() * 310);
+      // Skip over some green hues since there is a lot
+      if (hues[i] > 90 && hues[i] < 150) {
+        hues[i] += 20;
+      }
+    }
+  };
+
+  p.draw = () => {
+    p.background(0);
+    insertionSort(hues);
+    drawRainbow(p, hues);
+  };
+};
+
 function drawRainbow(p, hues) {
   for (let i = 0; i < hues.length; i++) {
     p.strokeWeight(1);
@@ -90,7 +117,7 @@ async function bubbleSort(arr) {
       let currentItem = arr[j];
       let nextItem = arr[j + 1];
       if (currentItem < nextItem) {
-        await sleep(10);
+        await sleep();
         await swap(arr, j, j + 1);
       }
     }
@@ -112,7 +139,7 @@ async function partition(items, left, right) {
       j--;
     }
     if (i <= j) {
-      await sleep(10);
+      await sleep();
       await swap(items, i, j);
       i++;
       j--;
@@ -122,7 +149,7 @@ async function partition(items, left, right) {
 }
 
 // From : https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
-function sleep(ms) {
+function sleep(ms = 10) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -137,12 +164,27 @@ async function quickSort(items, left, right) {
       await quickSort(items, index, right);
     }
   }
-
   return items;
+}
+
+async function insertionSort(arr) {
+  let n = arr.length;
+  for (let i = 1; i < n; i++) {
+    let current = arr[i];
+    let j = i - 1;
+    while (j > -1 && current > arr[j]) {
+      await sleep();
+      arr[j + 1] = arr[j];
+      j--;
+    }
+    arr[j + 1] = current;
+  }
+  return arr;
 }
 
 // TODO: Finish implementation
 // function selectionSort(arr){}
 
-let bubblesortSketch = new p5(bubbleSketch, "bubblesort-container");
+let bubbleSortSketch = new p5(bubbleSketch, "bubblesort-container");
+let insertionSortSketch = new p5(insertionSketch, "insertionsort-container");
 let quickSortSketch = new p5(quickSketch, "quicksort-container");
