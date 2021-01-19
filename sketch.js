@@ -4,28 +4,19 @@ let numOfColors = 200;
 
 let roundness = canvasWidth / 1.5;
 
+let backgroundColorRGB = 20;
+
 let bubbleSketch = (p) => {
   let hues = new Array(numOfColors);
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
 
-    /* TODO: Refactor how colors are generated
-     *   Rainbow colors should be generated and put into an
-     *   array, then shuffled. This will ensure the end result
-     *   of each rainbow is exactly the same.
-     */
-    for (let i = 0; i < hues.length; i++) {
-      hues[i] = Math.ceil(Math.random() * 310);
-      // Skip over some green hues since there is a lot
-      if (hues[i] > 90 && hues[i] < 150) {
-        hues[i] += 20;
-      }
-    }
+    generateRainbowHues(hues);
   };
 
   p.draw = () => {
-    p.background(0);
+    p.background(backgroundColorRGB);
     bubbleSort(hues);
     drawRainbow(p, hues);
   };
@@ -37,22 +28,11 @@ let quickSketch = (p) => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
 
-    /* TODO: Refactor how colors are generated
-     *   Rainbow colors should be generated and put into an
-     *   array, then shuffled. This will ensure the end result
-     *   of each rainbow is exactly the same.
-     */
-    for (let i = 0; i < hues.length; i++) {
-      hues[i] = Math.ceil(Math.random() * 310);
-      // Skip over some green hues since there is a lot
-      if (hues[i] > 90 && hues[i] < 150) {
-        hues[i] += 20;
-      }
-    }
+    generateRainbowHues(hues);
   };
 
   p.draw = () => {
-    p.background(0);
+    p.background(backgroundColorRGB);
     // Put appropriate sorting function here
     quickSort(hues, 0, hues.length - 1);
     drawRainbow(p, hues);
@@ -65,26 +45,46 @@ let insertionSketch = (p) => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
 
-    /* TODO: Refactor how colors are generated
-     *   Rainbow colors should be generated and put into an
-     *   array, then shuffled. This will ensure the end result
-     *   of each rainbow is exactly the same.
-     */
-    for (let i = 0; i < hues.length; i++) {
-      hues[i] = Math.ceil(Math.random() * 310);
-      // Skip over some green hues since there is a lot
-      if (hues[i] > 90 && hues[i] < 150) {
-        hues[i] += 20;
-      }
-    }
+    generateRainbowHues(hues);
   };
 
   p.draw = () => {
-    p.background(0);
+    p.background(backgroundColorRGB);
     insertionSort(hues);
     drawRainbow(p, hues);
   };
 };
+
+let selectionSketch = (p) => {
+  let hues = new Array(numOfColors);
+  p.setup = () => {
+    p.createCanvas(canvasWidth, canvasHeight);
+    p.frameRate(30);
+
+    generateRainbowHues(hues);
+  };
+
+  p.draw = () => {
+    p.background(backgroundColorRGB);
+    selectionSort(hues);
+    drawRainbow(p, hues);
+  };
+};
+
+function generateRainbowHues(hues) {
+  /* TODO: Refactor how colors are generated
+   *   Rainbow colors should be generated and put into an
+   *   array, then shuffled. This will ensure the end result
+   *   of each rainbow is exactly the same.
+   */
+  for (let i = 0; i < hues.length; i++) {
+    hues[i] = Math.ceil(Math.random() * 310);
+    // Skip over some green hues since there is a lot
+    if (hues[i] > 90 && hues[i] < 150) {
+      hues[i] += 20;
+    }
+  }
+}
 
 function drawRainbow(p, hues) {
   for (let i = 0; i < hues.length; i++) {
@@ -168,8 +168,7 @@ async function quickSort(items, left, right) {
 }
 
 async function insertionSort(arr) {
-  let n = arr.length;
-  for (let i = 1; i < n; i++) {
+  for (let i = 1; i < arr.length; i++) {
     let current = arr[i];
     let j = i - 1;
     while (j > -1 && current > arr[j]) {
@@ -182,9 +181,22 @@ async function insertionSort(arr) {
   return arr;
 }
 
-// TODO: Finish implementation
-// function selectionSort(arr){}
+async function selectionSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let min = i;
+    for (let j = i + 1; j < n; j++) {
+      if (arr[j] < arr[min]) {
+        min = j;
+      }
+    }
+    if (min != i) {
+      await swap(arr, min, i);
+    }
+  }
+  return arr;
+}
 
 let bubbleSortSketch = new p5(bubbleSketch, "bubblesort-container");
 let insertionSortSketch = new p5(insertionSketch, "insertionsort-container");
 let quickSortSketch = new p5(quickSketch, "quicksort-container");
+let selectionSortSketch = new p5(insertionSketch, "selectionsort-container");
