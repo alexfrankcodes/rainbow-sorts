@@ -1,5 +1,5 @@
-let canvasWidth = 800;
-let canvasHeight = 300;
+let canvasWidth = 600;
+let canvasHeight = 250;
 let numOfColors = 200;
 
 let roundness = canvasWidth / 1.5;
@@ -67,11 +67,6 @@ let selectionSketch = (p) => {
 };
 
 function generateRainbowHues(hues) {
-  /* TODO: Refactor how colors are generated
-   *   Rainbow colors should be generated and put into an
-   *   array, then shuffled. This will ensure the end result
-   *   of each rainbow is exactly the same.
-   */
   for (let i = 0; i < hues.length; i++) {
     hues[i] = Math.ceil(Math.random() * 310);
     //Skip over some green hues since there is a lot
