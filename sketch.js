@@ -6,13 +6,14 @@ let roundness = canvasWidth / 1.5;
 
 let backgroundColorRGB = 20;
 
+let globalHues = new Array(numOfColors);
+generateRainbowHues(globalHues);
+
 let bubbleSketch = (p) => {
-  let hues = new Array(numOfColors);
+  let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
-
-    generateRainbowHues(hues);
   };
 
   p.draw = () => {
@@ -23,12 +24,10 @@ let bubbleSketch = (p) => {
 };
 
 let quickSketch = (p) => {
-  let hues = new Array(numOfColors);
+  let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
-
-    generateRainbowHues(hues);
   };
 
   p.draw = () => {
@@ -40,12 +39,10 @@ let quickSketch = (p) => {
 };
 
 let insertionSketch = (p) => {
-  let hues = new Array(numOfColors);
+  let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
-
-    generateRainbowHues(hues);
   };
 
   p.draw = () => {
@@ -56,12 +53,10 @@ let insertionSketch = (p) => {
 };
 
 let selectionSketch = (p) => {
-  let hues = new Array(numOfColors);
+  let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(30);
-
-    generateRainbowHues(hues);
   };
 
   p.draw = () => {
@@ -79,7 +74,7 @@ function generateRainbowHues(hues) {
    */
   for (let i = 0; i < hues.length; i++) {
     hues[i] = Math.ceil(Math.random() * 310);
-    // Skip over some green hues since there is a lot
+    //Skip over some green hues since there is a lot
     if (hues[i] > 90 && hues[i] < 150) {
       hues[i] += 20;
     }
@@ -157,6 +152,7 @@ async function quickSort(items, left, right) {
   let index;
   if (items.length > 1) {
     index = await partition(items, left, right);
+
     if (left < index - 1) {
       await quickSort(items, left, index - 1);
     }
