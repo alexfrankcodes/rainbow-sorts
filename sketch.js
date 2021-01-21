@@ -93,10 +93,10 @@ function drawRainbow(p, hues) {
   }
 }
 
-async function swap(items, leftIndex, rightIndex) {
-  let temp = items[leftIndex];
-  items[leftIndex] = items[rightIndex];
-  items[rightIndex] = temp;
+async function swap(arr, leftIndex, rightIndex) {
+  let temp = arr[leftIndex];
+  arr[leftIndex] = arr[rightIndex];
+  arr[rightIndex] = temp;
 }
 
 async function bubbleSort(arr) {
@@ -116,20 +116,20 @@ async function bubbleSort(arr) {
   i++;
 }
 
-async function partition(items, left, right) {
-  let pivot = items[Math.floor((right + left) / 2)],
+async function partition(arr, left, right) {
+  let pivot = arr[Math.floor((right + left) / 2)],
     i = left,
     j = right;
   while (i <= j) {
-    while (items[i] > pivot) {
+    while (arr[i] > pivot) {
       i++;
     }
-    while (items[j] < pivot) {
+    while (arr[j] < pivot) {
       j--;
     }
     if (i <= j) {
       await sleep();
-      await swap(items, i, j);
+      await swap(arr, i, j);
       i++;
       j--;
     }
@@ -142,19 +142,19 @@ function sleep(ms = 10) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function quickSort(items, left, right) {
+async function quickSort(arr, left, right) {
   let index;
-  if (items.length > 1) {
-    index = await partition(items, left, right);
+  if (arr.length > 1) {
+    index = await partition(arr, left, right);
 
     if (left < index - 1) {
-      await quickSort(items, left, index - 1);
+      await quickSort(arr, left, index - 1);
     }
     if (index < right) {
-      await quickSort(items, index, right);
+      await quickSort(arr, index, right);
     }
   }
-  return items;
+  return arr;
 }
 
 async function insertionSort(arr) {
@@ -180,6 +180,7 @@ async function selectionSort(arr) {
       }
     }
     if (min != i) {
+      await sleep();
       await swap(arr, min, i);
     }
   }
@@ -189,4 +190,4 @@ async function selectionSort(arr) {
 let bubbleSortSketch = new p5(bubbleSketch, "bubblesort-container");
 let insertionSortSketch = new p5(insertionSketch, "insertionsort-container");
 let quickSortSketch = new p5(quickSketch, "quicksort-container");
-let selectionSortSketch = new p5(insertionSketch, "selectionsort-container");
+let selectionSortSketch = new p5(selectionSketch, "selectionsort-container");
