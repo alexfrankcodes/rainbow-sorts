@@ -1,7 +1,6 @@
-let canvasWidth = 600;
-let canvasHeight = 250;
-let numOfColors = 200;
-
+let canvasWidth = Math.min(600, window.innerWidth - 20);
+let canvasHeight = Math.min(250, window.innerHeight / 7);
+let numOfColors = Math.min(200, Math.floor(window.innerWidth / 5));
 let roundness = canvasWidth / 1.5;
 
 let backgroundColorRGB = 20;
@@ -112,7 +111,7 @@ async function bubbleSort(arr) {
       }
     }
   } else {
-    p.noLoop();
+    this.p.noLoop();
   }
   i++;
 }
@@ -175,7 +174,7 @@ async function insertionSort(arr) {
 async function selectionSort(arr) {
   for (let i = 0; i < arr.length; i++) {
     let min = i;
-    for (let j = i + 1; j < n; j++) {
+    for (let j = i + 1; j < arr.length; j++) {
       if (arr[j] < arr[min]) {
         min = j;
       }
