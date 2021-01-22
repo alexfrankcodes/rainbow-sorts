@@ -1,4 +1,4 @@
-# rainbow-sorts
+# 🌈 rainbow-sorts
 
 Visualizations of sorting algorithms through rainbows.
 
