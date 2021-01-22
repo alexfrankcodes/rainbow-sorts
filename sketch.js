@@ -1,6 +1,7 @@
-let canvasWidth = Math.min(600, window.innerWidth - 20);
-let canvasHeight = Math.min(250, window.innerHeight / 7);
-let numOfColors = Math.min(200, Math.floor(window.innerWidth / 5));
+let canvasWidth = 600;
+let canvasHeight = 250;
+let numOfColors = 50;
+let sketchFrameRate = 30;
 let roundness = canvasWidth / 1.5;
 
 let backgroundColorRGB = 20;
@@ -12,7 +13,7 @@ let bubbleSketch = (p) => {
   let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
-    p.frameRate(30);
+    p.frameRate(sketchFrameRate);
   };
 
   p.draw = () => {
@@ -26,7 +27,7 @@ let quickSketch = (p) => {
   let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
-    p.frameRate(30);
+    p.frameRate(sketchFrameRate);
   };
 
   p.draw = () => {
@@ -41,7 +42,7 @@ let insertionSketch = (p) => {
   let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
-    p.frameRate(30);
+    p.frameRate(sketchFrameRate);
   };
 
   p.draw = () => {
@@ -55,7 +56,7 @@ let selectionSketch = (p) => {
   let hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
-    p.frameRate(30);
+    p.frameRate(sketchFrameRate);
   };
 
   p.draw = () => {
@@ -77,15 +78,15 @@ function generateRainbowHues(hues) {
 
 function drawRainbow(p, hues) {
   for (let i = 0; i < hues.length; i++) {
-    p.strokeWeight(1);
+    p.strokeWeight(3);
     p.stroke(p.color(`hsl(${hues[i]}, 90%, 60%)`));
     p.translate(0, -0.09);
     p.noFill();
     p.arc(
       canvasWidth / 2,
       canvasHeight + 100,
-      roundness + i,
-      roundness + i,
+      roundness + i * 4,
+      roundness + i * 4,
       p.PI,
       0,
       p.OPEN
@@ -94,6 +95,7 @@ function drawRainbow(p, hues) {
 }
 
 async function swap(arr, leftIndex, rightIndex) {
+  await sleep();
   let temp = arr[leftIndex];
   arr[leftIndex] = arr[rightIndex];
   arr[rightIndex] = temp;
@@ -106,7 +108,6 @@ async function bubbleSort(arr) {
       let currentItem = arr[j];
       let nextItem = arr[j + 1];
       if (currentItem < nextItem) {
-        await sleep();
         await swap(arr, j, j + 1);
       }
     }
@@ -128,7 +129,6 @@ async function partition(arr, left, right) {
       j--;
     }
     if (i <= j) {
-      await sleep();
       await swap(arr, i, j);
       i++;
       j--;
@@ -138,7 +138,7 @@ async function partition(arr, left, right) {
 }
 
 // From : https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
-function sleep(ms = 10) {
+function sleep(ms = 20) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -180,7 +180,6 @@ async function selectionSort(arr) {
       }
     }
     if (min != i) {
-      await sleep();
       await swap(arr, i, min);
     }
   }
