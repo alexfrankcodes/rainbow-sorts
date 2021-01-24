@@ -1,16 +1,29 @@
-let canvasWidth = 600;
-let canvasHeight = 250;
-let numOfColors = 50;
-let sketchFrameRate = 30;
-let roundness = canvasWidth / 1.5;
+const canvasWidth = Math.min(600, window.innerWidth - 100);
+const canvasHeight = Math.min(250, window.innerHeight / 5);
+const numOfColors = 50;
+const sketchFrameRate = 30;
+const roundness = canvasWidth / 1.5;
 
-let backgroundColorRGB = 20;
+const arcThickness = 3;
+
+const backgroundColorRGB = 20;
 
 let globalHues = new Array(numOfColors);
+
+const generateRainbowHues = (hues) => {
+  for (let i = 0; i < hues.length; i++) {
+    hues[i] = Math.ceil(Math.random() * 310);
+    //Skip over some green hues since there is a lot
+    if (hues[i] > 90 && hues[i] < 150) {
+      hues[i] += 20;
+    }
+  }
+};
+
 generateRainbowHues(globalHues);
 
-let bubbleSketch = (p) => {
-  let hues = [...globalHues];
+const bubbleSketch = (p) => {
+  const hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(sketchFrameRate);
@@ -23,8 +36,8 @@ let bubbleSketch = (p) => {
   };
 };
 
-let quickSketch = (p) => {
-  let hues = [...globalHues];
+const quickSketch = (p) => {
+  const hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(sketchFrameRate);
@@ -32,14 +45,13 @@ let quickSketch = (p) => {
 
   p.draw = () => {
     p.background(backgroundColorRGB);
-    // Put appropriate sorting function here
     quickSort(hues, 0, hues.length - 1);
     drawRainbow(p, hues);
   };
 };
 
-let insertionSketch = (p) => {
-  let hues = [...globalHues];
+const insertionSketch = (p) => {
+  const hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(sketchFrameRate);
@@ -52,8 +64,8 @@ let insertionSketch = (p) => {
   };
 };
 
-let selectionSketch = (p) => {
-  let hues = [...globalHues];
+const selectionSketch = (p) => {
+  const hues = [...globalHues];
   p.setup = () => {
     p.createCanvas(canvasWidth, canvasHeight);
     p.frameRate(sketchFrameRate);
@@ -66,19 +78,9 @@ let selectionSketch = (p) => {
   };
 };
 
-function generateRainbowHues(hues) {
+const drawRainbow = (p, hues) => {
   for (let i = 0; i < hues.length; i++) {
-    hues[i] = Math.ceil(Math.random() * 310);
-    //Skip over some green hues since there is a lot
-    if (hues[i] > 90 && hues[i] < 150) {
-      hues[i] += 20;
-    }
-  }
-}
-
-function drawRainbow(p, hues) {
-  for (let i = 0; i < hues.length; i++) {
-    p.strokeWeight(3);
+    p.strokeWeight(arcThickness);
     p.stroke(p.color(`hsl(${hues[i]}, 90%, 60%)`));
     p.translate(0, -0.09);
     p.noFill();
@@ -88,20 +90,19 @@ function drawRainbow(p, hues) {
       roundness + i * 4,
       roundness + i * 4,
       p.PI,
-      0,
-      p.OPEN
+      0
     );
   }
-}
+};
 
-async function swap(arr, leftIndex, rightIndex) {
+const swap = async (arr, leftIndex, rightIndex) => {
   await sleep();
   let temp = arr[leftIndex];
   arr[leftIndex] = arr[rightIndex];
   arr[rightIndex] = temp;
-}
+};
 
-async function bubbleSort(arr) {
+const bubbleSort = async (arr) => {
   let i = 0;
   if (i < arr.length) {
     for (let j = 0; j < arr.length - i - 1; j++) {
@@ -115,9 +116,9 @@ async function bubbleSort(arr) {
     this.p.noLoop();
   }
   i++;
-}
+};
 
-async function partition(arr, left, right) {
+const partition = async (arr, left, right) => {
   let pivot = arr[Math.floor((right + left) / 2)],
     i = left,
     j = right;
@@ -135,14 +136,13 @@ async function partition(arr, left, right) {
     }
   }
   return i;
-}
+};
 
 // From : https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
-function sleep(ms = 20) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const sleep = async (ms = 20) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
-async function quickSort(arr, left, right) {
+const quickSort = async (arr, left, right) => {
   let index;
   if (arr.length > 1) {
     index = await partition(arr, left, right);
@@ -155,9 +155,9 @@ async function quickSort(arr, left, right) {
     }
   }
   return arr;
-}
+};
 
-async function insertionSort(arr) {
+const insertionSort = async (arr) => {
   for (let i = 1; i < arr.length; i++) {
     let current = arr[i];
     let j = i - 1;
@@ -169,9 +169,9 @@ async function insertionSort(arr) {
     arr[j + 1] = current;
   }
   return arr;
-}
+};
 
-async function selectionSort(arr) {
+const selectionSort = async (arr) => {
   for (let i = 0; i < arr.length; i++) {
     let min = i;
     for (let j = i + 1; j < arr.length; j++) {
@@ -184,9 +184,9 @@ async function selectionSort(arr) {
     }
   }
   return arr;
-}
+};
 
-let bubbleSortSketch = new p5(bubbleSketch, "bubblesort-container");
-let insertionSortSketch = new p5(insertionSketch, "insertionsort-container");
-let quickSortSketch = new p5(quickSketch, "quicksort-container");
-let selectionSortSketch = new p5(selectionSketch, "selectionsort-container");
+const bubbleSortSketch = new p5(bubbleSketch, "bubblesort-container");
+const insertionSortSketch = new p5(insertionSketch, "insertionsort-container");
+const quickSortSketch = new p5(quickSketch, "quicksort-container");
+const selectionSortSketch = new p5(selectionSketch, "selectionsort-container");
